@@ -1,3 +1,4 @@
+//import misc
 const express = require('express');
 const app = express();
 const port = 4000;
@@ -5,12 +6,22 @@ const expressSanitizer = require('express-sanitizer');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
+//import db files
 const genres = require('./db/genres.json');
 const artists = require('./db/raw_artists.json');
 const tracks = require('./db/raw_tracks.json');
 const albums = require('./db/raw_albums.json');
 const lists = require('./db/lists.json');
 
+//import routes
+const open = require('./routes/admin');
+const secure = require('./routes/secure');
+const admin = require('./routes/admin');
+
+//middleware
+app.use('/api/open', open);
+app.use('/api/secure', secure);
+app.use('/api/admin', admin);
 app.use(bodyParser.json());
 app.use('/', express.static('static'));
 app.use(expressSanitizer());

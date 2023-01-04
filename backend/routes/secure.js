@@ -33,10 +33,8 @@ router
             res.status(400).send('Maximum 20 playlists and playlist name must be unique.');
         }
         else{
-            newPlaylist.playtime = calculatePlaytime(newPlaylist);
-            newPlaylist.noTracks = newPlaylist.track_IDs.length;
             newPlaylist.reviews = [];
-            newPlaylist.lastModified = new Date().toLocaleString();
+            addDynamicFields(newPlaylist);
 
             let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
             data.push(newPlaylist);
@@ -45,7 +43,35 @@ router
         }
     })
     .post((req,res) => {
+        const uName = req.sanitize(req.params.username);
+        const userPlaylists = getUserPlaylists(uName);
+        const pName = req.sanitize(req.params.playlistName);
         
+        const listUpdate = req.body;
+        listUpdate.creator = uName;
+
+        if(!isValidRequest(listUpdate)){
+            res.status(400).send('Username and playlist name are required and must be in valid format.');
+        } 
+        else if(!playlistNameExists(userPlaylists,pName)){
+            res.status(400).send(`Playlist with name ${pName} does not exist.`);
+        }
+        else{
+            addDynamicFields(listUpdate);
+
+            let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
+            data.forEach(list => {
+                if(pName == list.name){
+                    list.name = listUpdate.name;
+                    list.track_IDs = listUpdate.track_IDs;
+                    list.visibility = listUpdate.visibility;
+                    list.desciprtion = listUpdate.description;
+                }
+            });
+
+            fs.writeFileSync(path.resolve(__dirname, '../db/lists.json'), JSON.stringify(data));
+            res.send(listUpdate);
+        }
     })
     .delete((req,res) => {
         //find playlist that matches username and playlist name
@@ -68,9 +94,9 @@ function getUserPlaylists(username){
 }
 
 function playlistNameExists(playlists, name){
-    playlists.forEach(playlist => {
-        if(playlist.name == name) return true;
-    });
+    for(let i=0;i<playlists.length;i++){
+        if(playlists[i].name == name) return true;
+    }
     return false;
 }
 
@@ -112,6 +138,12 @@ function timeToMins(secs){
     var m = String(secs/60);
     var s = String(secs%60).padStart(2,0);
     return Math.floor(m) + ':' + s;
+}
+
+function addDynamicFields(playlist){
+    playlist.playtime = calculatePlaytime(playlist);
+    playlist.noTracks = playlist.track_IDs.length;
+    playlist.lastModified = new Date().toLocaleString();
 }
 
 module.exports = router;

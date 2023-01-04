@@ -3,13 +3,15 @@ let router = express.Router();
 
 const lists = require('../db/lists.json');
 
+//3.f. list public playlists
 router.get('/public-playlists', (req,res) => {
     let publicPlaylists = [];
 
-    lists.forEach(list => {
-      if(publicPlaylists.length >= 10) return;  
-      if(list.visibility == 'public') publicPlaylists.push(list);  
-    });
+    for(var i=0;i<lists.length;i++){
+        if(publicPlaylists.length >= 10) break; 
+        let currentList = lists[i];
+        if(currentList.visibility == 'public') publicPlaylists.push(currentList);
+    }
 
     const sortedPublicPlaylists = publicPlaylists.sort((a,b) => {
         var c = new Date(a.lastModified);

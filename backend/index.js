@@ -14,7 +14,7 @@ const albums = require('./db/raw_albums.json');
 const lists = require('./db/lists.json');
 
 //import routes
-const open = require('./routes/admin');
+const open = require('./routes/open');
 const secure = require('./routes/secure');
 const admin = require('./routes/admin');
 
@@ -141,9 +141,9 @@ app.put('/api/lists/:name', (req, res) => {
     }
 
     if(!listNameExists){
-        let data = JSON.parse(fs.readFileSync('lists.json'));
+        let data = JSON.parse(fs.readFileSync('./db/lists.json'));
         data.push(newList);
-        fs.writeFileSync('lists.json', JSON.stringify(data));
+        fs.writeFileSync('./db/lists.json', JSON.stringify(data));
         res.send(newList);
     } else {
         res.status(400).send(`Playlist with name ${req.params.name} already exists`)
@@ -153,7 +153,7 @@ app.put('/api/lists/:name', (req, res) => {
 //Requirement 7
 app.post('/api/lists/:name', (req, res) => {
     const listUpdate = req.body;
-    let data = JSON.parse(fs.readFileSync('lists.json'));
+    let data = JSON.parse(fs.readFileSync('./db/lists.json'));
     let listNameExists = false;
 
     if(!isValidString(req.params.name)){
@@ -171,7 +171,7 @@ app.post('/api/lists/:name', (req, res) => {
     if(!listNameExists){
         res.status(400).send(`Playlist with name ${req.params.name} does not exist`);
     } else {
-        fs.writeFileSync('lists.json', JSON.stringify(data));
+        fs.writeFileSync('./db/lists.json', JSON.stringify(data));
         res.send(listUpdate);
     }
 })

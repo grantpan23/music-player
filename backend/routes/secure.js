@@ -34,6 +34,7 @@ router
         }
         else{
             newPlaylist.reviews = [];
+            newPlaylist.averageRating = 'No ratings yet'
             addDynamicFields(newPlaylist);
 
             let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
@@ -65,7 +66,7 @@ router
                     list.name = listUpdate.name;
                     list.track_IDs = listUpdate.track_IDs;
                     list.visibility = listUpdate.visibility;
-                    list.desciprtion = listUpdate.description;
+                    list.description = listUpdate.description;
                 }
             });
 
@@ -74,14 +75,58 @@ router
         }
     })
     .delete((req,res) => {
-        //find playlist that matches username and playlist name
-        //delete
+        const uName = req.sanitize(req.params.username);
+        const userPlaylists = getUserPlaylists(uName);
+        const pName = req.sanitize(req.params.playlistName);
+
+        if(!isValidString(pName)){
+            res.status(400).send(`Playlist name is in invalid format.`);
+        } 
+        else if(!playlistNameExists(userPlaylists,pName)){
+            res.status(400).send(`Playlist with name ${pName} was not found.`)
+        }
+        else{
+            let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
+            for(var i=0;i<data.length;i++){
+                currentList = data[i];
+                if(currentList.name == pName){
+                    data.splice(i, 1);
+                    res.send(currentList);
+                    fs.writeFileSync(path.resolve(__dirname, '../db/lists.json'), JSON.stringify(data));
+                } 
+            }
+        }
     });
 
 
 //4.e. add review
-router.put(`/:playlistName/review`, (req,res) =>{
+router.put(`/:username/:playlistName/create-review`, (req,res) =>{
+    const uName = req.sanitize(req.params.username);
+    const userPlaylists = getUserPlaylists(uName);
+    const pName = req.sanitize(req.params.playlistName);
+    const newReview = req.body;
+    let publicUserPlaylists = [];
 
+    userPlaylists.forEach(list => {
+        if(list.visibility == "public") publicUserPlaylists.push(list);
+    });
+
+    if(!playlistNameExists(publicUserPlaylists,pName)){
+        res.status(400).send('Playlist name does not exist');
+    } else if(!(isValidString(newReview.comment) && isValidRating(newReview.rating))) {
+        res.status(400).send(`Invalid rating.`);
+    } else{
+        newReview.hidden = false;
+        let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
+        data.forEach(list => {
+            if(list.name == pName && list.creator == uName){
+                list.reviews.push(newReview); 
+                list.averageRating = calculateAverageRating(list.reviews);
+            }
+        });
+        fs.writeFileSync(path.resolve(__dirname, '../db/lists.json'), JSON.stringify(data));
+        res.send(newReview);
+    }
 })
 
 //helper functions
@@ -110,6 +155,10 @@ function isValidString(s){
     return /^[a-z0-9]+$/.test(s);
 }
 
+function isValidRating(r){
+    return (r === parseInt(r,10)) && r>=1 && r<=5;
+}
+
 function onlyNumbers(arr){
     return arr.every(e => {
         return !isNaN(e);
@@ -127,6 +176,17 @@ function calculatePlaytime(playlist){
         }
     }
     return timeToMins(ptSeconds);
+}
+
+function calculateAverageRating(reviews){
+    let total = 0, count = 0;
+    reviews.forEach(review => {
+        if(!review.hidden){
+            total += review.rating;
+            count++;
+        } 
+    });
+    return (total/count).toFixed(1);
 }
 
 function timeToSecs(time){

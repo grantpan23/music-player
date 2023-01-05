@@ -11,7 +11,13 @@ router.use(expressSanitizer());
 
 //4.a. show user playlists
 router.get(`/:username/playlists`, (req,res) => {
-    res.send(getUserPlaylists(req.params.username));
+    const uName = req.sanitize(req.params.username);
+    if(!isValidString(uName)){
+        res.status(400).send(`Invalid username.`)
+    }
+    else{
+        res.send(getUserPlaylists(uName));
+    }
 })
 
 //4. a-d. playlist options
@@ -27,7 +33,7 @@ router
         newPlaylist.creator = uName;
 
         if(!isValidRequest(newPlaylist)){
-            res.status(400).send('Username and playlist name are required and must be in valid format.');
+            res.status(400).send('Username and playlist name are required and must be in valid format. All tracks must exist.');
         } 
         else if(userPlaylists.length>=20 || playlistNameExists(userPlaylists,pName)){
             res.status(400).send('Maximum 20 playlists and playlist name must be unique.');
@@ -52,7 +58,7 @@ router
         listUpdate.creator = uName;
 
         if(!isValidRequest(listUpdate)){
-            res.status(400).send('Username and playlist name are required and must be in valid format.');
+            res.status(400).send('Username and playlist name are required and must be in valid format. All tracks must exist.');
         } 
         else if(!playlistNameExists(userPlaylists,pName)){
             res.status(400).send(`Playlist with name ${pName} does not exist.`);
@@ -118,6 +124,7 @@ router.put(`/:username/:playlistName/:creatorName/create-review`, (req,res) =>{
         res.status(400).send(`Invalid rating.`);
     } else{
         newReview.username = uName;
+        newReview.dateTime = new Date().toLocaleString();
         newReview.hidden = false;
         let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
         data.forEach(list => {
@@ -150,7 +157,7 @@ function playlistNameExists(playlists, name){
 function isValidRequest(req){
     //check if the description exists; if it does and the string is not valid, return false. otherwise, check the others
     if(req.description && !isValidString(req.description)) return false;
-    return req.creator && req.name && isValidString(req.name) && isValidString(req.creator) && onlyNumbers(req.track_IDs);
+    return req.creator && req.name && isValidString(req.name) && isValidString(req.creator) && onlyNumbers(req.track_IDs) && tracksExist(req.track_IDs);
 }
 
 function isValidString(s){
@@ -165,6 +172,18 @@ function onlyNumbers(arr){
     return arr.every(e => {
         return !isNaN(e);
       });
+}
+
+function tracksExist(track_IDs){
+    let dbTracks = [];
+    tracks.forEach(track => {
+        dbTracks.push(track.track_id);
+    });
+
+    for(let i=0;i<track_IDs.length;i++){
+        if(!dbTracks.includes(track_IDs[i])) return false;
+    }
+    return true;
 }
 
 function calculatePlaytime(playlist){

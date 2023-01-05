@@ -100,26 +100,28 @@ router
 
 
 //4.e. add review
-router.put(`/:username/:playlistName/create-review`, (req,res) =>{
+router.put(`/:username/:playlistName/:creatorName/create-review`, (req,res) =>{
     const uName = req.sanitize(req.params.username);
-    const userPlaylists = getUserPlaylists(uName);
+    const cName = req.sanitize(req.params.creatorName);
+    const creatorPlaylists = getUserPlaylists(cName);
     const pName = req.sanitize(req.params.playlistName);
     const newReview = req.body;
-    let publicUserPlaylists = [];
+    let publicCreatorPlaylists = [];
 
-    userPlaylists.forEach(list => {
-        if(list.visibility == "public") publicUserPlaylists.push(list);
+    creatorPlaylists.forEach(list => {
+        if(list.visibility == "public") publicCreatorPlaylists.push(list);
     });
 
-    if(!playlistNameExists(publicUserPlaylists,pName)){
+    if(!playlistNameExists(publicCreatorPlaylists,pName)){
         res.status(400).send('Playlist name does not exist');
     } else if(!(isValidString(newReview.comment) && isValidRating(newReview.rating))) {
         res.status(400).send(`Invalid rating.`);
     } else{
+        newReview.username = uName;
         newReview.hidden = false;
         let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
         data.forEach(list => {
-            if(list.name == pName && list.creator == uName){
+            if(list.name == pName && list.creator == cName){
                 list.reviews.push(newReview); 
                 list.averageRating = calculateAverageRating(list.reviews);
             }

@@ -3,6 +3,8 @@ let router = express.Router();
 
 const lists = require('../db/lists.json');
 
+//3.b. search
+
 //3.f. list public playlists
 router.get('/public-playlists', (req,res) => {
     let publicPlaylists = [];
@@ -21,5 +23,7 @@ router.get('/public-playlists', (req,res) => {
 
     res.send(sortedPublicPlaylists);
 })
+
+//3.g-h. get detailed track info
 
 module.exports = router;

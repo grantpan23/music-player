@@ -69,10 +69,10 @@ router
             let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
             data.forEach(list => {
                 if(pName == list.name){
-                    list.name = listUpdate.name;
-                    list.track_IDs = listUpdate.track_IDs;
-                    list.visibility = listUpdate.visibility;
-                    list.description = listUpdate.description;
+                    list.name = req.sanitize(listUpdate.name);
+                    list.track_IDs = req.sanitize(listUpdate.track_IDs);
+                    list.visibility = req.sanitize(listUpdate.visibility);
+                    list.description = req.sanitize(listUpdate.description);
                 }
             });
 

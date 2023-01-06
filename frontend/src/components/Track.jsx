@@ -4,7 +4,6 @@ import PlayBtn from "./PlayBtn";
 export default function Track(props){
     const [isExpand,setIsExpand]=useState(false)
 
-
     return(
         <div>
             <p>Track: {props.name}</p>

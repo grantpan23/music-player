@@ -19,8 +19,11 @@ export default function Main(){
     const [click,setClick] =useState(true)
     const [userID, setID]=useState("")
     const [users,setUsers]= useState([])
+    const [username,setUsername] = useState('')
     const [isAdmin,setisAdmin]= useState(false)
     const [isDisable,setIsDisable] = useState(false)
+    
+    const [token,setToken] = useState('');
 
     useEffect(()=>{
         onAuthStateChanged(auth, (user) => {
@@ -45,21 +48,48 @@ export default function Main(){
         loadData()
     },[])
 
-    
-    
-    let userVer=false
-    let disableUser=false
+   
     useEffect(()=>{
+        let userVer=false;
+        let disableUser=false;
+        let uName = '';
         console.log(users)
+
+        //get list of users and find correct user info based on ID
         for(let i=0;i<users.length;i++){
             if(users[i].id==userID){
-                userVer = users[i].admin
-                disableUser = users[i].disable
+                userVer = users[i].admin;
+                disableUser = users[i].disable;
+                uName = users[i].name;
             }
         } 
         setisAdmin(userVer)
         setIsDisable(disableUser)
-        console.log(disableUser)
+        setUsername(uName);
+
+        const payload = {
+            name: uName,
+            admin: userVer,
+            disable: disableUser
+        };
+        
+        //fetch token passing user info as body
+        async function fetchToken() {
+            const response = await fetch(`api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+
+            const token = await response.json();
+            setToken(token);
+            console.log(token);
+        }
+
+        fetchToken();
+
     },[users])
 
     const handleLogOut = () => {

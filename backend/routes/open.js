@@ -56,6 +56,19 @@ router.get('/public-playlists', (req,res) => {
     res.send(sortedPublicPlaylists);
 })
 
+//get track by ID
+router.get(`/track/:trackID`, (req,res) =>{
+    const trackID = req.sanitize(req.params.trackID);
+
+    tracks.forEach(track =>{
+        if(track.track_id == trackID){
+            res.send(track);
+        }
+    })
+
+    res.status(400).send('Track not found.')
+})
+
 //3.g-h. get detailed track info
 
 //helper functions

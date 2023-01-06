@@ -1,79 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import List from "./List"
 
 export default function PublicList(props){
-    const [lists,setlists]=useState([{
-        "track_IDs": [
-            146716,
-            146717,
-            146718
-        ],
-        "visibility": "public",
-        "description": "asdfasdfd",
-        "name": "test46",
-        "creator": "datasianguy23",
-        "reviews": [
-            {
-                "rating": 5,
-                "comment": "ok",
-                "username": "grantpan",
-                "dateTime": "2023-01-06, 2:53:00 p.m.",
-                "hidden": false
-            }
-        ],
-        "averageRating": "5.0",
-        "playtime": "14:24",
-        "noTracks": 3,
-        "lastModified": "2023-01-05, 12:18:29 p.m."
-    },
-    {
-        "track_IDs": [
-            146716,
-            146717,
-            146718
-        ],
-        "visibility": "public",
-        "description": "asdfasdfd",
-        "name": "test46",
-        "creator": "datasianguy23",
-        "reviews": [
-            {
-                "rating": 5,
-                "comment": "ok",
-                "username": "grantpan",
-                "dateTime": "2023-01-06, 2:53:00 p.m.",
-                "hidden": false
-            }
-        ],
-        "averageRating": "5.0",
-        "playtime": "14:24",
-        "noTracks": 3,
-        "lastModified": "2023-01-05, 12:18:29 p.m."
-    },
-    {
-        "track_IDs": [
-            146716,
-            146717,
-            146718
-        ],
-        "visibility": "public",
-        "description": "asdfasdfd",
-        "name": "test46",
-        "creator": "datasianguy23",
-        "reviews": [
-            {
-                "rating": 5,
-                "comment": "ok",
-                "username": "grantpan",
-                "dateTime": "2023-01-06, 2:53:00 p.m.",
-                "hidden": false
-            }
-        ],
-        "averageRating": "5.0",
-        "playtime": "14:24",
-        "noTracks": 3,
-        "lastModified": "2023-01-05, 12:18:29 p.m."
-    }])
+    const [lists,setLists]=useState([]);
+
+    useEffect(() => {
+        const fetchPublicPlaylists = async() =>{
+            const response = await fetch('/api/open/public-playlists');
+            const playlists = await response.json();
+            setLists(playlists);
+            console.log(playlists);
+        }
+
+        fetchPublicPlaylists();
+    },[])
 
     const listElement = lists.map(list => 
         <div>

@@ -2,12 +2,10 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { json, Link, useNavigate } from "react-router-dom"
 import { auth, db } from "../firebase";
-import UserList from "./admin/UserList"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import Search from "./Search";
-import ListShow from "./playlist/ListShow";
 import PublicList from "./playlist/PublicList";
 
 

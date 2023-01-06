@@ -5,7 +5,6 @@ import Main from './components/Main'
 import { useContext } from 'react'
 import { AuthContext } from './context/AuthContext'
 import Unauth from './components/Unauth'
-import ListShow from './components/ListShow'
 import UserList from './components/admin/UserList'
 
 
@@ -23,9 +22,7 @@ function App() {
       <Routes>
         <Route path='/'>
           <Route path='login' element={<Login />} />
-          <Route index element={<Unauth />}></Route>
-          <Route path='list' element={<ListShow />}/>
-          
+          <Route index element={<Unauth />}></Route>          
           <Route 
             path='main' 
             element={

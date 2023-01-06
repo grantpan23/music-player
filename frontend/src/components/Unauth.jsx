@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import Search from "./Search"
 
 export default function Unauth(){
     const navigate = useNavigate()
@@ -16,6 +17,7 @@ export default function Unauth(){
                 </text>
             </div>
             <button onClick={handleClick}>Log in/Sign in</button>
+            <Search />
         </div>
     )
 }

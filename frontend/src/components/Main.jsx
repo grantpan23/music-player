@@ -3,11 +3,11 @@ import { useState } from "react"
 import { json, Link, useNavigate } from "react-router-dom"
 import { auth, db } from "../firebase";
 import UserList from "./admin/UserList"
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import PlayBtn from "./PlayBtn";
+import Search from "./Search";
 
 
 
@@ -113,23 +113,7 @@ export default function Main(){
             <div>
                 <button onClick={handleLogOut}>Log out</button>
                 <button onClick={handleUpdate}>Change Password</button>
-                <div>
-                    <h1>Artists & Genres</h1>
-                    <div id="search-container">
-                        <form id="number-search">
-                            <input type="text" placeholder="Search artists..." onChange={e => setArtist(e.target.value)}/>
-                            <button onClick={handleArtists} type="submit">Go!</button>
-                        </form>
-                        <form id="album-track-search">
-                            <input type="text" placeholder="Search albums or tracks..." onChange={e => setTrack(e.target.value)}/>
-                            <button onClick={handleTracks} type="submit">Go!</button>
-                        </form>
-                    </div>
-                    <button onClick={handleGenres} type="submit" >Show All Genres</button>
-                </div>
-                <div id = "results">
-                    <ol id="search-results"></ol>
-                </div>
+                <Search />
                 {isAdmin && <Link to="/admin">Go to admin</Link>}
                 <PlayBtn searchKey="testing 1"/>
             </div>

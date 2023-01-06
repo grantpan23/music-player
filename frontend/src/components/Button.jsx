@@ -7,7 +7,7 @@ import { auth, db } from "../firebase";
 export default function Button(props){
     const [isAdmin, setIsAdmin] = useState(false)
 
-    console.log(props.id)
+
     useEffect(()=>{
         const AdminCheck = async ()=>{
           const docRef = doc(db, "users", `${props.id}`);

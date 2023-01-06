@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import { AuthContext } from "../context/AuthContext";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore"; 
 import jwt_decode from "jwt-decode";
-import { GoogleAuthProvider } from 'firebase/auth'
+import { GoogleAuthProvider, sendEmailVerification  } from 'firebase/auth'
 
 
 export default function Login(){
@@ -60,6 +60,7 @@ export default function Login(){
                 email: email,
                 name: userName
           });
+            await res.user.sendEmailVerification();
           dispatch({type: "LOGIN", payload:res.user})
           navigate("/")
         } catch (e) {

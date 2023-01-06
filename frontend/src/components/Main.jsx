@@ -6,8 +6,9 @@ import UserList from "./admin/UserList"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import PlayBtn from "./PlayBtn";
 import Search from "./Search";
+import ListShow from "./playlist/ListShow";
+import PublicList from "./playlist/PublicList";
 
 
 
@@ -145,7 +146,7 @@ export default function Main(){
                 <button onClick={handleUpdate}>Change Password</button>
                 <Search />
                 {isAdmin && <Link to="/admin">Go to admin</Link>}
-                <PlayBtn searchKey="testing 1"/>
+                <PublicList />
             </div>
             }
             

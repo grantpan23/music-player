@@ -56,6 +56,7 @@ export default function Login(){
             const res= await createUserWithEmailAndPassword(auth, email, password)
             await setDoc(doc(db, "users", res.user.uid), {
                 admin: false,
+                disable:false,
                 email: email,
                 name: userName
           });

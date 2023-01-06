@@ -20,6 +20,7 @@ export default function Main(){
     const [userID, setID]=useState("")
     const [users,setUsers]= useState([])
     const [isAdmin,setisAdmin]= useState(false)
+    const [isDisable,setIsDisable] = useState(false)
 
     useEffect(()=>{
         onAuthStateChanged(auth, (user) => {
@@ -47,14 +48,18 @@ export default function Main(){
     
     
     let userVer=false
+    let disableUser=false
     useEffect(()=>{
         console.log(users)
         for(let i=0;i<users.length;i++){
             if(users[i].id==userID){
                 userVer = users[i].admin
+                disableUser = users[i].disable
             }
         } 
         setisAdmin(userVer)
+        setIsDisable(disableUser)
+        console.log(disableUser)
     },[users])
 
     const handleLogOut = () => {
@@ -81,9 +86,6 @@ export default function Main(){
     // }),[click])
 
      useEffect(()=>{
-         fetch('api/genres')
-         .then(res=> res.json())
-         .then(data => console.log(data))
      },[click])
 
     const handleGenres = () => {
@@ -102,29 +104,37 @@ export default function Main(){
     }
 
     return(
-    
         <div>
+            {isDisable ? 
+            <div>
+                <h1>U r deactivated pls contact an admin at test@gmail.com</h1>
+                <button onClick={handleLogOut}>Go back</button>
+            </div> : 
+            <div>
                 <button onClick={handleLogOut}>Log out</button>
                 <button onClick={handleUpdate}>Change Password</button>
-            <div>
-                <h1>Artists & Genres</h1>
-                <div id="search-container">
-                    <form id="number-search">
-                        <input type="text" placeholder="Search artists..." onChange={e => setArtist(e.target.value)}/>
-                        <button onClick={handleArtists} type="submit">Go!</button>
-                    </form>
-                    <form id="album-track-search">
-                        <input type="text" placeholder="Search albums or tracks..." onChange={e => setTrack(e.target.value)}/>
-                        <button onClick={handleTracks} type="submit">Go!</button>
-                    </form>
+                <div>
+                    <h1>Artists & Genres</h1>
+                    <div id="search-container">
+                        <form id="number-search">
+                            <input type="text" placeholder="Search artists..." onChange={e => setArtist(e.target.value)}/>
+                            <button onClick={handleArtists} type="submit">Go!</button>
+                        </form>
+                        <form id="album-track-search">
+                            <input type="text" placeholder="Search albums or tracks..." onChange={e => setTrack(e.target.value)}/>
+                            <button onClick={handleTracks} type="submit">Go!</button>
+                        </form>
+                    </div>
+                    <button onClick={handleGenres} type="submit" >Show All Genres</button>
                 </div>
-                <button onClick={handleGenres} type="submit" >Show All Genres</button>
+                <div id = "results">
+                    <ol id="search-results"></ol>
+                </div>
+                {isAdmin && <Link to="/admin">Go to admin</Link>}
+                <PlayBtn searchKey="testing 1"/>
             </div>
-            <div id = "results">
-                <ol id="search-results"></ol>
-            </div>
-            {isAdmin && <Link to="/admin">Go to admin</Link>}
-            <PlayBtn searchKey="testing 1"/>
+            }
+            
         </div>
     )
 }

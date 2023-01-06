@@ -9,10 +9,10 @@ router.use(express.json());
 router.use(expressSanitizer());
 
 //3.b. search by artist, genre, or track title
-router.get('/search', (req,res) => {
-    const artistSearch = req.sanitize(req.body.artistSearch) || null;
-    const genreSearch = req.sanitize(req.body.genreSearch) || null;
-    const titleSearch = req.sanitize(req.body.titleSearch) || null;
+router.get('/search/', (req,res) => {
+    const artistSearch = req.sanitize(req.query.artist) || null;
+    const genreSearch = req.sanitize(req.query.genre) || null;
+    const titleSearch = req.sanitize(req.query.title) || null;
     let output = [];
 
     if(titleSearch){

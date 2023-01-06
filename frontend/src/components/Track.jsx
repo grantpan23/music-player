@@ -8,16 +8,16 @@ export default function Track(props){
     return(
         <div>
             <p>Track: {props.name}</p>
-            <p>Artist: {props.singer}</p>
-            <PlayBtn searchKey={props.name}/>
+            <p>Artist: {props.artist}</p>
+            <PlayBtn searchKey={props.name + " " + props.artist}/>
             {isExpand ? 
             <div>
                 <p>Time: {props.time}</p>
                 <p>Album: {props.album}</p>
-                <button onClick={(e)=>{setIsExpand(false)}}>close expand</button>
+                <button onClick={(e)=>{setIsExpand(false)}}>Close</button>
             </div> :          
             <div>
-                <button onClick={(e)=>{setIsExpand(true)}}>expand</button>
+                <button onClick={(e)=>{setIsExpand(true)}}>Expand</button>
             </div>
             }
         </div>

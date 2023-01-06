@@ -7,25 +7,30 @@ export default function Search(){
     const [titleName,setTitleName] = useState("");
     const [artistName,setArtistName] = useState("");
     const [genreName,setGenreName] = useState("");
+    const [isSearch,setIsSearch]=useState(false)
 
-    const handleSearch = async () => {
-        const searchTerms = {
-            artistSearch: artistName,
-            genreSearch: genreName,
-            titleSearch: titleName
-        }
-
-        const response = await fetch(`/api/open/search/?title=${titleName}&artist=${artistName}&genre=${genreName}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'  
+    useEffect(()=>{
+        const handleSearch = async () => {
+            const searchTerms = {
+                artistSearch: artistName,
+                genreSearch: genreName,
+                titleSearch: titleName
             }
-        });
+    
+            const response = await fetch(`/api/open/search/?title=${titleName}&artist=${artistName}&genre=${genreName}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'  
+                }
+            });
+    
+            const newTracks = await response.json();
+    
+            setTracks(newTracks);
+        }
+        handleSearch()
+    },[isSearch])
 
-        const newTracks = await response.json();
-
-        setTracks(newTracks);
-    }
 
     const trackElement = tracks.map(track => 
         <div>
@@ -49,7 +54,7 @@ export default function Search(){
                         <input type="text" placeholder="Genre name..." value = {genreName} onChange={e => setGenreName(e.target.value)}/>
                     </form>
                 </div>
-                <button  type="submit" onClick={handleSearch} >Search</button>
+                <button  type="submit" onClick={setIsSearch(!isSearch)} >Search</button>
                 </div>
                 <div className="result" >
                     {trackElement}

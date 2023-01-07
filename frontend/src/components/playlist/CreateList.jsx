@@ -19,7 +19,7 @@ export default function CreateList(props){
     },[])
 
     const handleClick = async() =>{
-        if(!playlistName || tracksList){
+        if(!playlistName || !tracksList){
             alert('Playlist name and at least one track are both required.');
             return;
         }

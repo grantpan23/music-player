@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { auth, db } from "../../firebase";
 import PrivateList from "./PrivateList";
+import { json, Link, useNavigate } from "react-router-dom"
+import PublicList from "./PublicList";
 
 
 export default function ListShow(){
@@ -11,10 +13,11 @@ export default function ListShow(){
 
     return(
         <div>
-            <form action="">
-                <button>Create playlist</button>
-            </form>
-            <PrivateList />
+            {/* <PublicList ></PublicList> */}
+            <Link to="private">To ur private list</Link>
+            <div>
+                <Link to="/main">Go back</Link>
+            </div>
         </div>
     )
 }

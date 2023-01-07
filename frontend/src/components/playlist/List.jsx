@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useState } from "react"
 import Track from "../Track"
-import ListEdit from "./ListEdit"
+
 
 
 export default function List(props){
@@ -53,7 +53,7 @@ export default function List(props){
                 <p>Number of tracks: {props.tracks.length}</p>
                 <p>Avg rating; {props.rating}</p>
                 <p>Play time: {props.playtime}</p>
-                {props.created && <button onClick={(e)=>{props.edit(props.name)}}>Edit</button>}
+                {props.created && <button onClick={(e)=>{props.edit(props.name,props.creator)}}>Edit</button>}
                 <button>Add comment and rating</button>
                 {isExpand ? 
                 <div>

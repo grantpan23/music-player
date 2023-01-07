@@ -2,11 +2,12 @@ import { useCallback, useEffect } from "react"
 import { useState } from "react"
 import Track from "./Track"
 
-export default function Search(){
+export default function Search(props){
     const [tracks,setTracks] = useState([]);
     const [titleName,setTitleName] = useState("");
     const [artistName,setArtistName] = useState("");
     const [genreName,setGenreName] = useState("");
+    const [collapse,setCollapse] = useState(false)
 
     const handleSearch = async () => {
         const searchTerms = {
@@ -30,7 +31,7 @@ export default function Search(){
     const trackElement = tracks.map(track => 
         <div>
             <h2>----------------------------</h2>
-            <Track key={track.track_id} name ={track.track_title} artist={track.artist_name} time={track.track_duration} album={track.album_title}/>
+            <Track creator={props.creator} list={props.list} addable={props.addable} key={track.track_id} name ={track.track_title} artist={track.artist_name} time={track.track_duration} album={track.album_title}/>
         </div>
     )
 
@@ -50,9 +51,11 @@ export default function Search(){
                     </form>
                 </div>
                 <button  type="submit" onClick={handleSearch} >Search</button>
+                {collapse ? <button onClick={(e)=>{setCollapse(false)}}>Collapse Search</button>:
+                <button onClick={(e)=>{setCollapse(true)}}>Expand Search</button>} 
                 </div>
                 <div className="result" >
-                    {trackElement}
+                    {collapse && trackElement}
             </div>
         </div>
     )

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import PublicList from "./playlist/PublicList"
 import Search from "./Search"
 
 export default function Unauth(){
@@ -18,6 +19,7 @@ export default function Unauth(){
             </div>
             <button onClick={handleClick}>Log in/Sign in</button>
             <Search addable={false} />
+            <PublicList/>
         </div>
     )
 }

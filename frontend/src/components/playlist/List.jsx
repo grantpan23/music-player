@@ -43,19 +43,22 @@ export default function List(props){
             if(response.ok){
                 const data = await response.json();
                 setTracks(data.track_IDs);
-                setNoTracks(tracks.length);
                 setVisibility(data.visibility);
                 setDescription(data.description);
                 setReviews(data.reviews);
                 setAverageRating(data.averageRating);
                 setPlaytime(data.playtime);
                 setLastModified(data.lastModified);
+                setNoTracks(data.noTracks);
             } else{
                 console.log(response)
-                // setNoTracks('unavailable');
-                // setName('unavailable');
-                // setCreator('unavailable');
-                // setAvailable(false); //if playlist not found it's no longer available
+                setNoTracks('unavailable');
+                setName('unavailable');
+                setCreator('unavailable');
+                setAverageRating('unavailable');
+                setPlaytime('unavailable');
+                setLastModified('unavailable');
+                setAvailable(false); //if playlist not found it's no longer available
             }
             setIsLoading(false);
         }

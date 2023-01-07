@@ -53,10 +53,11 @@ router
         const uName = req.sanitize(req.params.username);
         const userPlaylists = getUserPlaylists(uName);
         const pName = req.sanitize(req.params.playlistName);
+        const newPName = req.sanitize(req.body.name);
         
         const listUpdate = req.body;
         listUpdate.creator = uName;
-        listUpdate.name = pName;
+        listUpdate.name = newPName;
 
         if(!isValidRequest(listUpdate)){
             res.status(400).send('Username and playlist name are required and must be in valid format. All tracks must exist.');

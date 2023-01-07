@@ -44,6 +44,20 @@ router.get(`/:username/playlists`, authenticateToken, (req,res) => {
 //4. a-d. playlist options
 router
     .route(`/:username/:playlistName`)
+    .get((req,res) => {
+        if(!isSameUser(req)) res.status(401).send('Not the same user.');
+
+        const uName = req.sanitize(req.params.username);
+        const userPlaylists = getUserPlaylists(uName);
+        const pName = req.sanitize(req.params.playlistName);
+
+        userPlaylists.forEach(list => {
+            if(list.name == pName)
+                res.send(list);
+        })
+
+        res.status(400).send('Playlist not found.');
+    })
     .put((req,res) => {
         if(!isSameUser(req)) res.status(401).send('Not the same user.');
 

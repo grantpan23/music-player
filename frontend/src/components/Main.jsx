@@ -13,10 +13,6 @@ import PrivateList from "./playlist/PrivateList";
 
 export default function Main(){
     const navigate = useNavigate()
-    const [genres,setGenres] = useState('')
-    const [artist,setArtist]= useState('')
-    const [track,setTrack]= useState('')
-    const [click,setClick] =useState(true)
     const [userID, setID]=useState("")
     const [users,setUsers]= useState([])
     const [username,setUsername] = useState('')
@@ -101,37 +97,6 @@ export default function Main(){
        
     }
 
-    // useEffect((async()=>{
-    //     const response = await fetch('api/genres', {
-    //         method: 'GET',
-    //         headers: {'Content-Type': 'application/json'}
-    // })
-    // if(response.status != 200){
-    //     let message = await response.text();
-    //     alert(message);
-    //     return;
-    // }
-    // const g = await response.json();
-    // setGenres(g)
-    // }),[click])
-
-     useEffect(()=>{
-     },[click])
-
-    const handleGenres = () => {
-        setClick(!click)
-        console.log(genres)
-    }
-
-    const handleArtists = () => {
-        setArtist('hello')
-        console.log(artist)
-    }
-
-    const handleTracks = () => {
-        setTrack('hello')
-        console.log(artist)
-    }
 
     return(
         <div>
@@ -144,9 +109,12 @@ export default function Main(){
                 <button onClick={handleLogOut}>Log out</button>
                 <button onClick={handleUpdate}>Change Password</button>
                 <Search addable={false}/>
-                {isAdmin && <Link to="/admin">Go to admin</Link>}
+                {isAdmin && <Link to={{pathname: "/admin", token: token}}>Go to admin</Link>}
                 <div>
-                    <Link to="user/list">Go to List</Link>
+                    <Link to={"user/list/private"} state={{username:username, token:token.accessToken}}>My Playlists</Link>
+                </div>
+                <div>
+                    <PublicList/>
                 </div>
             </div>
             }

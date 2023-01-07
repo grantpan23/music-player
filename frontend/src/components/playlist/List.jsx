@@ -39,7 +39,17 @@ export default function List(props){
         
         const fetchPlaylistData = async() => {
             console.log('sending request');
-            const response = await fetch(`/api/open/public-playlists/${name}/${creator}`);
+            let response;
+            if(props.token){
+                response = await fetch(`/api/secure/${creator}/${name}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': props.token
+                    }
+                });
+            } else {
+                response = await fetch(`/api/open/public-playlists/${name}/${creator}`);
+            } 
             if(response.ok){
                 const data = await response.json();
                 setTracks(data.track_IDs);
@@ -97,7 +107,7 @@ export default function List(props){
                 <button>Add comment and rating</button>
                 {!isLoading ? 
                 <div>
-                    {isExpand && available && (visibility == "public") && 
+                    {isExpand && available && ((!props.token && visibility == "public") || props.token) && 
                         <div>
                             <p>*****************************</p>
                             <p>description: {description}</p>
@@ -107,7 +117,7 @@ export default function List(props){
                             <button onClick={(e)=>{setIsExpand(false)}}>Close List</button>
                         </div>
                     }   
-                    {isExpand && (!available || visibility == "private") &&
+                    {isExpand && (!available || (!props.token && visibility == "private")) &&
                             <div><h2>Playlist no longer available.</h2></div>        
                     }
                     {!isExpand && <button onClick={(e)=>{setIsExpand(true)}}>Expand List</button>}

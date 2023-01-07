@@ -17,7 +17,7 @@ export default function PublicList(props){
     const listElement = lists.map(list => 
         <div>
             <h2>----------------------------</h2>
-            <List created={false} admin={false} name={list.name} creator={list.creator} des={list.description} reviews={list.reviews} tracks={list.track_IDs} playtime={list.playtime} rating={list.averageRating} lastModified={list.lastModified} />
+            <List token = {null} created={false} admin={false} name={list.name} creator={list.creator} des={list.description} reviews={list.reviews} tracks={list.track_IDs} playtime={list.playtime} rating={list.averageRating} lastModified={list.lastModified} />
         </div>
     )
     return(

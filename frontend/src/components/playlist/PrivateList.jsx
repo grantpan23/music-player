@@ -6,6 +6,7 @@ import Search from "../Search";
 import EditedReview from "./EditedReview";
 import EditedTrack from "./EditedTrack";
 import List from "./List";
+import { useLocation } from "react-router-dom";
 
 import { json, Link, useNavigate } from "react-router-dom"
 
@@ -13,83 +14,12 @@ import { json, Link, useNavigate } from "react-router-dom"
 
 export default function PrivateList(props){
     const [isEdit,setIsEdit] = useState(false)
-    const[listname,setListName] = useState([])
+    const[listName,setListName] = useState([])
     const[isExpand,setIsExpand]=useState([false])
     const[isExpandComment,setIsExpandComment]=useState([false])
     const [creator,setCreator] = useState("")
   
-    const [lists,setlists]=useState([{
-        "track_IDs": [
-            146716,
-            146717,
-            146718
-        ],
-        "visibility": "public",
-        "description": "asdfasdfd",
-        "name": "test46",
-        "creator": "datasianguy23",
-        "reviews": [
-            {
-                "rating": 5,
-                "comment": "ok",
-                "username": "grantpan",
-                "dateTime": "2023-01-06, 2:53:00 p.m.",
-                "hidden": false
-            }
-        ],
-        "averageRating": "5.0",
-        "playtime": "14:24",
-        "noTracks": 3,
-        "lastModified": "2023-01-05, 12:18:29 p.m."
-    },
-    {
-        "track_IDs": [
-            146716,
-            146717,
-            146718
-        ],
-        "visibility": "public",
-        "description": "asdfasdfd",
-        "name": "test46",
-        "creator": "datasianguy23",
-        "reviews": [
-            {
-                "rating": 5,
-                "comment": "ok",
-                "username": "grantpan",
-                "dateTime": "2023-01-06, 2:53:00 p.m.",
-                "hidden": false
-            }
-        ],
-        "averageRating": "5.0",
-        "playtime": "14:24",
-        "noTracks": 3,
-        "lastModified": "2023-01-05, 12:18:29 p.m."
-    },
-    {
-        "track_IDs": [
-            146716,
-            146717,
-            146718
-        ],
-        "visibility": "public",
-        "description": "asdfasdfd",
-        "name": "test46",
-        "creator": "datasianguy23",
-        "reviews": [
-            {
-                "rating": 5,
-                "comment": "ok",
-                "username": "grantpan",
-                "dateTime": "2023-01-06, 2:53:00 p.m.",
-                "hidden": false
-            }
-        ],
-        "averageRating": "5.0",
-        "playtime": "14:24",
-        "noTracks": 3,
-        "lastModified": "2023-01-05, 12:18:29 p.m."
-    }])
+    const [lists,setLists]=useState([])
 
     const [editedList,setEditedList]=useState({
         "track_IDs": [
@@ -242,6 +172,26 @@ export default function PrivateList(props){
         }
     ])
 
+    const location = useLocation();
+    const username = location.state.username;
+    const token = location.state.token;
+
+    useEffect(() => {
+        const fetchUserPlaylists = async() =>{
+            const response = await fetch(`/api/secure/${username}/playlists`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': token
+                }
+            })
+            const playlists = await response.json();
+            console.log(playlists)
+            setLists(playlists);
+        }
+
+        fetchUserPlaylists();
+    },[])
+
     const editFunc = (name,creator) =>{
         setListName(name)
         setCreator(creator)
@@ -259,7 +209,7 @@ export default function PrivateList(props){
     const listElement = lists.map(list => 
         <div>
             <h2>----------------------------</h2>
-            <List isEdit={isEdit} edit={editFunc} created={true} admin={false} name={list.name} creator={list.creator} des={list.description} reviews={list.reviews} tracks={list.track_IDs} playtime={list.playtime} rating={list.averageRating} lastModified={list.lastModified} />
+            <List token = {token} isEdit={isEdit} edit={editFunc} created={true} admin={false} name={list.name} creator={list.creator} des={list.description} reviews={list.reviews} tracks={list.track_IDs} playtime={list.playtime} rating={list.averageRating} lastModified={list.lastModified} />
         </div>
     )
 
@@ -287,11 +237,9 @@ export default function PrivateList(props){
                 <button onClick={(e)=>{setIsEdit(false)}}>Cancel</button>
             </div> :             
             <div>
-                <button>Make new playList</button>
+                <Link to="/main/user/list/private/create" state={{username:username,token:token}}>Create a playlist</Link> {' '}
+                <Link to="/main">Go Back</Link>
                 {listElement}
-                <div>
-                    <Link to="/main/user/list">Go Back</Link>
-                </div>
             </div>
             }
         </div>

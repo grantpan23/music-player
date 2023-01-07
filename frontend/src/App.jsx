@@ -8,6 +8,7 @@ import Unauth from './components/Unauth'
 import UserList from './components/admin/UserList'
 import PrivateList from './components/playlist/PrivateList'
 import ListShow from './components/playlist/ListShow'
+import CreateList from './components/playlist/CreateList'
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           </Route>
           <Route path='admin' element={<UserList />}/>
           <Route path='main/user/list/private' element={<PrivateList />}/>
+          <Route path='main/user/list/private/create' element={<CreateList/>}/>
           <Route path='main/user/list' element={<ListShow />}/>
         </Route>
       </Routes>

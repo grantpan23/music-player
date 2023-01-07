@@ -56,6 +56,7 @@ router
         
         const listUpdate = req.body;
         listUpdate.creator = uName;
+        listUpdate.name = pName;
 
         if(!isValidRequest(listUpdate)){
             res.status(400).send('Username and playlist name are required and must be in valid format. All tracks must exist.');
@@ -70,9 +71,12 @@ router
             data.forEach(list => {
                 if(pName == list.name){
                     list.name = req.sanitize(listUpdate.name);
-                    list.track_IDs = req.sanitize(listUpdate.track_IDs);
+                    list.track_IDs = listUpdate.track_IDs;
                     list.visibility = req.sanitize(listUpdate.visibility);
                     list.description = req.sanitize(listUpdate.description);
+                    list.playtime = req.sanitize(listUpdate.playtime);
+                    list.noTracks = req.sanitize(listUpdate.noTracks);
+                    list.lastModified = req.sanitize(listUpdate.lastModified);
                 }
             });
 

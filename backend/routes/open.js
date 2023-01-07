@@ -4,7 +4,9 @@ const Fuse = require('fuse.js');
 const expressSanitizer = require('express-sanitizer');
 const lists = require('../db/lists.json');
 const tracks = require('../db/raw_tracks.json');
+const cors = require('cors');
 
+router.use(cors());
 router.use(express.json());
 router.use(expressSanitizer());
 
@@ -39,13 +41,7 @@ router.get('/search/', (req,res) => {
 
 //3.f. list public playlists
 router.get('/public-playlists', (req,res) => {
-    let publicPlaylists = [];
-
-    for(var i=0;i<lists.length;i++){
-        if(publicPlaylists.length >= 10) break; 
-        let currentList = lists[i];
-        if(currentList.visibility == 'public') publicPlaylists.push(currentList);
-    }
+    const publicPlaylists = getPublicPlaylists();
 
     const sortedPublicPlaylists = publicPlaylists.sort((a,b) => {
         var c = new Date(a.lastModified);
@@ -54,6 +50,20 @@ router.get('/public-playlists', (req,res) => {
     });
 
     res.send(sortedPublicPlaylists);
+})
+
+//get specific public playlist, used for race conditions
+router.get(`/public-playlists/:playlistName/:creatorName`, (req,res) =>{
+   
+    const pName = req.sanitize(req.params.playlistName);
+    const cName = req.sanitize(req.params.creatorName);
+    const publicPlaylists = getPublicPlaylists();
+
+    for(let i=0;i<publicPlaylists.length;i++){
+        if(publicPlaylists[i].creator == cName && publicPlaylists[i].name == pName) res.send(publicPlaylists[i]);
+    }
+    
+    res.status(400).send('Playlist not found.')
 })
 
 //get track by ID
@@ -86,6 +96,19 @@ function searchTracks(searchTerm,key,data){
         unwrapped.push(e.item);
     });
     return unwrapped;
+}
+
+function getPublicPlaylists(){
+    let output = [];
+
+    for(var i=0;i<lists.length;i++){
+        if(output.length >= 10) return output; //return if there are 10
+
+        let currentList = lists[i];
+        if(currentList.visibility == 'public') output.push(currentList);
+    }
+
+    return output; //returns when less than 10
 }
 
 module.exports = router;

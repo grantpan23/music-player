@@ -9,7 +9,6 @@ export default function PublicList(props){
             const response = await fetch('/api/open/public-playlists');
             const playlists = await response.json();
             setLists(playlists);
-            console.log(playlists);
         }
 
         fetchPublicPlaylists();

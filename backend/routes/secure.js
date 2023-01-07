@@ -124,7 +124,7 @@ router.put(`/:username/:playlistName/:creatorName/create-review`, (req,res) =>{
         res.status(400).send(`Invalid rating.`);
     } else{
         newReview.username = uName;
-        newReview.dateTime = new Date().toLocaleString();
+        newReview.dateTime = currentDateTime();
         newReview.hidden = false;
         let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/lists.json')));
         data.forEach(list => {
@@ -224,7 +224,22 @@ function timeToMins(secs){
 function addDynamicFields(playlist){
     playlist.playtime = calculatePlaytime(playlist);
     playlist.noTracks = playlist.track_IDs.length;
-    playlist.lastModified = new Date().toLocaleString();
+    playlist.lastModified = currentDateTime();
+}
+
+function currentDateTime(){
+    let current = new Date();
+    
+    const dd = String(current.getDate()).padStart(2, '0');
+    const mm = String(current.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = current.getFullYear();
+    const hr = String(current.getHours()).padStart(2, '0');
+    const min = String(current.getMinutes()).padStart(2, '0');
+    const sec = String(current.getSeconds()).padStart(2, '0');
+
+    current = mm + '/' + dd + '/' + yyyy + " " + hr + ':' + min + ':' + sec;
+
+    return current;
 }
 
 module.exports = router;

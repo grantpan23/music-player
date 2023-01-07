@@ -50,7 +50,7 @@ router.get('/public-playlists', (req,res) => {
     const sortedPublicPlaylists = publicPlaylists.sort((a,b) => {
         var c = new Date(a.lastModified);
         var d = new Date(b.lastModified);
-        return c-d;
+        return d-c;
     });
 
     res.send(sortedPublicPlaylists);
@@ -66,7 +66,7 @@ router.get(`/track/:trackID`, (req,res) =>{
         }
     })
 
-    res.status(400).send('Track not found.')
+    res.status(400).send(`Track with ID ${trackID} not found.`)
 })
 
 //3.g-h. get detailed track info

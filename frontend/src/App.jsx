@@ -6,6 +6,8 @@ import { useContext } from 'react'
 import { AuthContext } from './context/AuthContext'
 import Unauth from './components/Unauth'
 import UserList from './components/admin/UserList'
+import PrivateList from './components/playlist/PrivateList'
+import ListShow from './components/playlist/ListShow'
 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
           }>
           </Route>
           <Route path='admin' element={<UserList />}/>
+          <Route path='main/user/list/private' element={<PrivateList />}/>
+          <Route path='main/user/list' element={<ListShow />}/>
         </Route>
       </Routes>
     </div>

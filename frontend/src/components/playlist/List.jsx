@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react"
 import { useState } from "react"
 import Track from "../Track"
-import ListEdit from "./ListEdit"
+
 
 
 export default function List(props){
@@ -90,7 +90,7 @@ export default function List(props){
                 <p>Number of tracks: {noTracks}</p>
                 <p>Average rating: {averageRating}</p>
                 <p>Play time: {playtime}</p>
-                {props.created && <button onClick={(e)=>{props.edit(name)}}>Edit</button>}
+                {props.created && <button onClick={(e)=>{props.edit(name,creator)}}>Edit</button>}
                 <button>Add comment and rating</button>
                 {!isLoading ? 
                 <div>

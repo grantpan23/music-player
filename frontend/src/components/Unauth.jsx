@@ -17,7 +17,7 @@ export default function Unauth(){
                 </text>
             </div>
             <button onClick={handleClick}>Log in/Sign in</button>
-            <Search />
+            <Search addable={false} />
         </div>
     )
 }

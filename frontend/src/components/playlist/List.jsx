@@ -6,12 +6,11 @@ import ListEdit from "./ListEdit"
 
 export default function List(props){
     const [isExpand,setIsExpand]=useState(false)
-    
     const [tracks,setTracks]=useState([])
 
     useEffect(() => {
-
         const getTrackInfo = async() =>{
+            //wait for all promises to resolve
             let trackInfo = await Promise.all(
                 props.tracks.map(async (track) =>{
                     const response = await fetch(`/api/open/track/${track}`);
@@ -19,12 +18,9 @@ export default function List(props){
                     return data;
                 })
             );
-
             setTracks(trackInfo);
         }
-
         getTrackInfo();
-
     },[])
     
     const reviewElement = props.reviews.map(review =>
@@ -48,7 +44,7 @@ export default function List(props){
             <div>
                 <h2>Name: {props.name} </h2>
                 {props.created ? <p>Last modify by {props.lastModified}</p> :            
-                <p>Created by: {props.creator}, last modify by {props.lastModified}</p>
+                <p>Created by: {props.creator}, last modified at: {props.lastModified}</p>
                 }
                 <p>Number of tracks: {props.tracks.length}</p>
                 <p>Avg rating; {props.rating}</p>

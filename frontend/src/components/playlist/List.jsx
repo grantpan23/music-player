@@ -110,7 +110,7 @@ export default function List(props){
                     {isExpand && available && ((!props.token && visibility == "public") || props.token) && 
                         <div>
                             <p>*****************************</p>
-                            <p>description: {description}</p>
+                            <p>Description: {description}</p>
                             {trackElement}
                             <h2>Reviews:</h2>
                             {reviewElement}

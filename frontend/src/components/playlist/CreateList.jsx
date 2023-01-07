@@ -30,11 +30,9 @@ export default function CreateList(props){
             "description": description
         }
 
-        console.log(newPlaylist);
-
         const response = await fetch(`/api/secure/${username}/${playlistName}`,{ 
             method: 'PUT',
-            headers: {'Content-Type': 'application/json', Authorization: token},
+            headers: {'Content-Type': 'application/json', 'Authorization': token},
             body: JSON.stringify(newPlaylist)
         })
 

@@ -161,7 +161,7 @@ function isValidRequest(req){
 }
 
 function isValidString(s){
-    return /^[a-z0-9]+$/.test(s);
+    return /^[a-z\d\-_\s]+$/i.test(s);
 }
 
 function isValidRating(r){

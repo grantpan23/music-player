@@ -10,6 +10,7 @@ import PrivateList from './components/playlist/PrivateList'
 import ListShow from './components/playlist/ListShow'
 import CreateList from './components/playlist/CreateList'
 import CreateReview from './components/playlist/CreateReview'
+import ChangePass from './components/ChangePass'
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path='main/user/list/private/create' element={<CreateList/>}/>
           <Route path='main/user/list' element={<ListShow />}/>
           <Route path='main/create-review' element={<CreateReview />}/>
+          <Route path='main/change-password' element={<ChangePass />}/>
         </Route>
       </Routes>
     </div>

@@ -98,9 +98,6 @@ export default function Main(){
         navigate("/")
     }
 
-    const handleUpdate = () => {
-       
-    }
 
 
     return(
@@ -114,7 +111,7 @@ export default function Main(){
                 </div> : 
                 <div>
                     <button onClick={handleLogOut}>Log out</button>
-                    <button onClick={handleUpdate}>Change Password</button>
+                    <Link to="change-password">Change Password</Link>
                     <Search addable={false}/>
                     {isAdmin && <Link to={{pathname: "/admin", token: token}}>Go to admin</Link>}
                     <div>

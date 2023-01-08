@@ -11,6 +11,7 @@ import ListShow from './components/playlist/ListShow'
 import CreateList from './components/playlist/CreateList'
 
 
+
 function App() {
   const [count, setCount] = useState(0)
   const {currentUser}=useContext(AuthContext)
@@ -38,6 +39,7 @@ function App() {
           <Route path='main/user/list/private' element={<PrivateList />}/>
           <Route path='main/user/list/private/create' element={<CreateList/>}/>
           <Route path='main/user/list' element={<ListShow />}/>
+
         </Route>
       </Routes>
     </div>

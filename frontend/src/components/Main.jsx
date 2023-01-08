@@ -2,12 +2,13 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { json, Link, useNavigate } from "react-router-dom"
 import { auth, db } from "../firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged,sendEmailVerification  } from "firebase/auth"; 
 import { doc, getDoc } from "firebase/firestore";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import Search from "./Search";
 import PublicList from "./playlist/PublicList";
 import PrivateList from "./playlist/PrivateList";
+
 
 
 
@@ -18,6 +19,8 @@ export default function Main(){
     const [username,setUsername] = useState('')
     const [isAdmin,setisAdmin]= useState(false)
     const [isDisable,setIsDisable] = useState(false)
+    const [ver,setVer]=useState(false)
+    const [cUser,setcUser]=useState()
     
     const [token,setToken] = useState('');
 
@@ -26,6 +29,8 @@ export default function Main(){
             if (user) {
               const uid = user.uid;
               setID(uid)
+              setVer(user.emailVerified)
+              setcUser(auth.currentUser)
             } 
           });
           
@@ -100,25 +105,32 @@ export default function Main(){
 
     return(
         <div>
-            {isDisable ? 
+            {ver ?            
             <div>
-                <h1>U r deactivated pls contact an admin at test@gmail.com</h1>
-                <button onClick={handleLogOut}>Go back</button>
-            </div> : 
-            <div>
-                <button onClick={handleLogOut}>Log out</button>
-                <button onClick={handleUpdate}>Change Password</button>
-                <Search addable={false}/>
-                {isAdmin && <Link to={{pathname: "/admin", token: token}}>Go to admin</Link>}
+                {isDisable ? 
                 <div>
-                    <Link to={"user/list/private"} state={{username:username, token:token.accessToken}}>My Playlists</Link>
-                </div>
+                    <h1>U r deactivated pls contact an admin at test@gmail.com</h1>
+                    <button onClick={handleLogOut}>Go back</button>
+                </div> : 
                 <div>
-                    <PublicList/>
+                    <button onClick={handleLogOut}>Log out</button>
+                    <button onClick={handleUpdate}>Change Password</button>
+                    <Search addable={false}/>
+                    {isAdmin && <Link to={{pathname: "/admin", token: token}}>Go to admin</Link>}
+                    <div>
+                        <Link to={"user/list/private"} state={{username:username, token:token.accessToken}}>My Playlists</Link>
+                    </div>
+                    <div>
+                        <PublicList/>
+                    </div>
+                </div> 
+                }  
+            </div> :
+                <div>
+                    <h1>not Verified</h1>
+                    <button onClick={(e)=>{sendEmailVerification(cUser)}}>Resend verify link</button>
                 </div>
-            </div>
             }
-            
         </div>
     )
 }

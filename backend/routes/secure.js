@@ -37,7 +37,14 @@ router.get(`/:username/playlists`, authenticateToken, (req,res) => {
         res.status(400).send(`Invalid username.`)
     }
     else{
-        res.send(getUserPlaylists(uName));
+        const unsortedUserPlaylists = getUserPlaylists(uName);
+        const sortedUserPlaylists = unsortedUserPlaylists.sort((a,b) => {
+            var c = new Date(a.lastModified);
+            var d = new Date(b.lastModified);
+            return d-c;
+        })
+
+        res.send(sortedUserPlaylists);
     }
 })
 
@@ -215,7 +222,7 @@ function isValidRequest(req){
 }
 
 function isValidString(s){
-    return /^[a-z\d\-_\s]+$/i.test(s);
+    return /^[a-z\d\-_\s]+$/i.test(s) && s.length <= 200;
 }
 
 function isValidRating(r){

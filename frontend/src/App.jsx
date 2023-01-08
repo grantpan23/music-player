@@ -11,6 +11,8 @@ import ListShow from './components/playlist/ListShow'
 import CreateList from './components/playlist/CreateList'
 import CreateReview from './components/playlist/CreateReview'
 import ChangePass from './components/ChangePass'
+import LogsDMCA from './components/LogsDMCA'
+import AdminWin from './components/admin/AdminWin'
 
 
 function App() {
@@ -36,12 +38,13 @@ function App() {
             </RequireAuth>
           }>
           </Route>
-          <Route path='admin' element={<UserList />}/>
+          <Route path='admin' element={<AdminWin />}/>
           <Route path='main/user/list/private' element={<PrivateList />}/>
           <Route path='main/user/list/private/create' element={<CreateList/>}/>
           <Route path='main/user/list' element={<ListShow />}/>
           <Route path='main/create-review' element={<CreateReview />}/>
           <Route path='main/change-password' element={<ChangePass />}/>
+          <Route path='admin/logs-dmca' element={<LogsDMCA />}/>
         </Route>
       </Routes>
     </div>

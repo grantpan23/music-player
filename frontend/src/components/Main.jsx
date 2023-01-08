@@ -115,7 +115,7 @@ export default function Main(){
                     <Link to="change-password">Change Password</Link>
                     <div><Policies></Policies></div>
                     <Search addable={false}/>
-                    {isAdmin && <Link to={{pathname: "/admin", token: token}}>Go to admin</Link>}
+                    {isAdmin && <Link to={"/admin"} state={{username:username,token:token}}>Go to admin</Link>}
                     <div>
                         <Link to={"user/list/private"} state={{username:username, token:token}}>My Playlists</Link>
                     </div>

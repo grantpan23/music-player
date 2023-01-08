@@ -6,6 +6,7 @@ const lists = require('../db/lists.json');
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 router.use(authenticateToken);
 router.use(express.json());
@@ -72,6 +73,46 @@ router.post(`/:adminName/:playlistName/:creatorName/reviews/:reviewerName/change
         fs.writeFileSync(path.resolve(__dirname, '../db/lists.json'), JSON.stringify(data));
         res.send(changedReview);
     }
+})
+
+router.put(`/:adminName/log/:logType`, (req,res) => {
+    if(!isSameUser(req)) res.status(401).send('Not the same user.');
+
+    const pName = req.sanitize(req.body.playlistName);
+    const cName = req.sanitize(req.body.creatorName);
+    const rName = req.sanitize(req.body.reviewerName);
+    const rTime = req.sanitize(req.body.reviewDateTime);
+    const logDate = req.sanitize(req.body.date)
+    const logType = req.sanitize(req.params.logType);
+
+    const log = req.body;
+    log.type = logType;
+
+    const validLogTypes = ['Request', 'Notice', 'Dispute'];
+    const creatorPlaylists = getUserPlaylists(cName);
+
+    let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../db/dmca_logs.json')));    
+
+    if(!validLogTypes.includes(logType)){
+        res.status(400).send('Invalid log type')
+    } else if(!moment(logDate).isValid() || !moment(rTime).isValid()){
+        res.status(400).send('Invalid date')
+    } else if(!playlistNameExists(creatorPlaylists,pName)){
+        res.status(400).send('Playlist not found')
+    } else {
+        lists.forEach(list => {
+            if(list.creator == cName && list.name == pName){
+                review = getReview(list.reviews,rName,rTime)
+                if(!getReview){
+                    res.status(400).send('Review not found')
+                } else {
+                    data.push(log)
+                    fs.writeFileSync(path.resolve(__dirname, '../db/dmca_logs.json'), JSON.stringify(data));
+                    res.send(log);
+                }
+            }
+        })
+    }    
 })
 
 //helper functions

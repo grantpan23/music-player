@@ -28,30 +28,6 @@ export default function Login(){
 
     const {dispatch,users} = useContext(AuthContext)
      
-    // function handleCallbackResponse(response) {
-    //     try{
-    //         console.log("Encoded JWT ID token: " + response.credential);
-    //         var userObject = jwt_decode(response.credential);
-    //         console.log(userObject);
-    //         alert('Successful login!');
-    //     }
-    //     catch(e) {
-    //         console.log("Error with Google login: " + e);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     /* global google */
-    //     google.accounts.id.initialize({
-    //       client_id: "791977041679-ht5uepsie5ai84k5gd677sm91fu1umrs.apps.googleusercontent.com",
-    //       callback: handleCallbackResponse
-    //     })
-
-    //     google.accounts.id.renderButton(
-    //         document.getElementById("googleBtn"),
-    //         {theme: "outline", size: "large"}
-    //     );
-    //   }, []);
 
     const handleRegister = async (e) =>{
         e.preventDefault()
@@ -111,7 +87,7 @@ export default function Login(){
              <input type="password" placeholder="password" onChange={e => setPassword(e.target.value)}/>
              <button type="submit">Register</button>
              <div onClick={e => setIsLogIn(true)}>Log in</div>
-             {err && <span>Wrong email or password</span>}
+             {err && <span>Email already in use</span>}
              {sameNameErr && <span>User name already exist</span>}
              {missEmail && <span>Missing email</span>}
              {missName && <span>Missing username</span>}

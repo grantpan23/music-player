@@ -19,7 +19,6 @@ export default function PrivateList(props){
     const [tracksList,setTracksList] = useState([]);
     const [description,setDescription] = useState('');
     const [visibility,setVisibility] = useState('')
-  
     const [lists,setLists]=useState([])
 
     const location = useLocation();
@@ -87,7 +86,26 @@ export default function PrivateList(props){
             return;
         }
         alert('Success')
-        setIsEdit(false);
+        window.location.reload()
+    }
+
+    const handleConfirmDelete = async(e) =>{
+        e.preventDefault();
+        const confirmDelete = window.confirm("Are you sure you want to delete this playlist?");
+        if (confirmDelete) {
+            const response = await fetch(`/api/secure/${creator}/${listName}`, { 
+                method: 'DELETE',
+                headers: {'Authorization': token},
+            })
+
+            if(response.status != 200){
+                const message = await response.text();
+                alert(message);
+                return;
+            }
+            alert('Success')
+            window.location.reload()
+        }
     }
     
     const listElement = lists.map(list => 
@@ -96,6 +114,7 @@ export default function PrivateList(props){
             <List token = {token} isEdit={isEdit} edit={editFunc} created={true} admin={false} name={list.name} creator={list.creator} des={list.description} reviews={list.reviews} tracks={list.track_IDs} playtime={list.playtime} rating={list.averageRating} lastModified={list.lastModified} />
         </div>
     )
+
 
     return(
         <div>
@@ -131,7 +150,11 @@ export default function PrivateList(props){
             </div>
                 <button onClick={handleSave}>Save</button>
                 <button onClick={(e)=>{setIsEdit(false)}}>Cancel</button>
-            </div> :             
+            <div>
+                <button onClick = {handleConfirmDelete}>Delete Playlist</button>
+            </div>
+        </div> 
+            :             
             <div>
                 <Link to="/main/user/list/private/create" state={{username:username,token:token}}>Create a playlist</Link> {' '}
                 <Link to="/main">Go Back</Link>

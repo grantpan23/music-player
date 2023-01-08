@@ -11,6 +11,7 @@ export default function Unauth(){
     return(
         <div>
             <h1>Lab 4 Music & Playlist Application</h1>
+            <a href="https://docs.google.com/document/d/e/2PACX-1vTg3KEq6YFkKMJQf5QhN3-Y634D5EpHWICJpef8p9fQR-lTBvm0D2UxRM7WQwCxItpkr-SxY7nXpqNx/pub" target="_blank">Policies</a>
             <h2>About:</h2>
             <div>
                 <text>A full-stack web application that allows you to search for songs, view public playlists, and play songs on Youtube.

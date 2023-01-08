@@ -8,6 +8,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import Search from "./Search";
 import PublicList from "./playlist/PublicList";
 import PrivateList from "./playlist/PrivateList";
+import Policies from "./Policies";
 
 
 
@@ -112,6 +113,7 @@ export default function Main(){
                 <div>
                     <button onClick={handleLogOut}>Log out</button>
                     <Link to="change-password">Change Password</Link>
+                    <div><Policies></Policies></div>
                     <Search addable={false}/>
                     {isAdmin && <Link to={{pathname: "/admin", token: token}}>Go to admin</Link>}
                     <div>

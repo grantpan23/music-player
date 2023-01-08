@@ -39,6 +39,7 @@ function App() {
           <Route path='main/user/list/private' element={<PrivateList />}/>
           <Route path='main/user/list/private/create' element={<CreateList/>}/>
           <Route path='main/user/list' element={<ListShow />}/>
+          <Route path='main/create-review' element={<CreateReview />}/>
         </Route>
       </Routes>
     </div>

@@ -3,6 +3,8 @@ import List from "./List"
 
 export default function PublicList(props){
     const [lists,setLists]=useState([]);
+    const [username,setUsername] = useState(props.username)
+    const [token,setToken] = useState(props.token)
 
     useEffect(() => {
         const fetchPublicPlaylists = async() =>{
@@ -12,6 +14,7 @@ export default function PublicList(props){
         }
 
         fetchPublicPlaylists();
+        console.log(props.token)
     },[])
 
     const listElement = lists.map(list => 

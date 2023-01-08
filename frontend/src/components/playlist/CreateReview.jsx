@@ -41,6 +41,8 @@ export default function CreateReview(props) {
         }
 
         console.log(newReview);
+        console.log(token);
+        console.log(state)
     
         const response = await fetch(`/api/secure/${username}/${playlistName}/${creatorName}/create-review`, { 
             method: 'PUT',

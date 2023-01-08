@@ -85,8 +85,8 @@ export default function Main(){
             })
 
             const token = await response.json();
-            setToken(token);
-            console.log(token);
+            setToken(token.accessToken);
+            console.log(token.accessToken);
         }
 
         fetchToken();
@@ -118,10 +118,10 @@ export default function Main(){
                     <Search addable={false}/>
                     {isAdmin && <Link to={{pathname: "/admin", token: token}}>Go to admin</Link>}
                     <div>
-                        <Link to={"user/list/private"} state={{username:username, token:token.accessToken}}>My Playlists</Link>
+                        <Link to={"user/list/private"} state={{username:username, token:token}}>My Playlists</Link>
                     </div>
                     <div>
-                        <PublicList/>
+                        <PublicList isAdmin = {isAdmin} token = {token} isLoggedIn = {true} username = {username}/>
                     </div>
                 </div> 
                 }  
@@ -133,7 +133,7 @@ export default function Main(){
                         <button onClick={handleLogOut}>Log out</button>
                     </div>
                     <div>
-                        <PublicList isAdmin = {isAdmin} token = {token.accessToken} isLoggedIn = {true} username = {username} />
+                        <PublicList isAdmin = {isAdmin} token = {token} isLoggedIn = {true} username = {username} />
                     </div>
                 </div>
             }

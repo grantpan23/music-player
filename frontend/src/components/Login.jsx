@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { auth, db } from "../firebase";
+import { auth, db, signInWithGoogle } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -80,19 +80,32 @@ export default function Login(){
         });
     }
 
+    const handleGoogleLogin = async(e) => {
+        const response = await signInWithGoogle();
+        dispatch({type: "LOGIN", payload:response})
+        console.log(response) //start
+        alert('Successful login!')
+        navigate("/main") //end
+    }
+
     return(
         <div className="login">
-            { isLogIn ?            
-            <form onSubmit={handleLogIn}>
-                <input type="email" placeholder="email" onChange={e => setEmail(e.target.value)}/>
-                <input type="password" placeholder="password" onChange={e => setPassword(e.target.value)}/>
-                <button type="submit">Login</button>
-                <div id="googleBtn"></div>
-                <div onClick={e => setIsLogIn(false)}>Register</div>
-                {err && <span>Wrong email or password</span>}
-                {loginEmailEmpty && <span>Email required</span>}
-                {loginPasswordEmpty && <span>Password required</span>}
-            </form> :
+            { isLogIn ?      
+            <div>      
+                <form onSubmit={handleLogIn}>
+                    <input type="email" placeholder="email" onChange={e => setEmail(e.target.value)}/>
+                    <input type="password" placeholder="password" onChange={e => setPassword(e.target.value)}/>
+                    <button type="submit">Login</button>
+                    <div id="googleBtn"></div>
+                    <div onClick={e => setIsLogIn(false)}>Register</div>
+                    {err && <span>Wrong email or password</span>}
+                    {loginEmailEmpty && <span>Email required</span>}
+                    {loginPasswordEmpty && <span>Password required</span>}
+                </form>
+                <div>
+                    <button onClick={e => handleGoogleLogin(e)}>Sign in with Google</button>
+                </div>
+            </div> :
             <form onSubmit={handleRegister}>
             <input  placeholder="user name" onChange={e => setuserName(e.target.value)}/>
              <input type="email" placeholder="email" onChange={e => setEmail(e.target.value)}/>

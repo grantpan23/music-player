@@ -129,6 +129,7 @@ export default function Main(){
                 <div>
                     <h1>not Verified</h1>
                     <button onClick={(e)=>{sendEmailVerification(cUser)}}>Resend verify link</button>
+                    <button onClick={handleLogOut}>Log out</button>
                 </div>
             }
         </div>

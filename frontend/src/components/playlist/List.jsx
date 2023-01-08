@@ -20,6 +20,60 @@ export default function List(props){
     const [noTracks,setNoTracks] = useState(props.tracks.length);
     const [name,setName] = useState(props.name);
     const [creator,setCreator] = useState(props.creator);
+    const [buttonText, setButtonText] = useState(() => {
+        let output = [];
+        props.reviews.forEach(review => {
+            output.push(review.hidden);
+        })
+        return output;
+    });
+
+    const [displayedReviews,setDisplayedReviews] = useState(() => {
+        let output = [];
+
+        if(props.isAdmin){
+            output = props.reviews;
+        } else {
+            props.reviews.forEach(review => {
+                if(!review.hidden) output.push(review);
+            })
+        }
+        return output;
+    })
+
+    const toggleButtonText = index => {
+    setButtonText(prevState => {
+        const newButtonText = [...prevState];
+        newButtonText[index] = !newButtonText[index];
+        return newButtonText;
+    });
+    };
+
+    const handleClick = async (index) =>{
+        const review = reviews[index];
+
+        const body = {
+            "dateTime": review.dateTime,
+            "hidden": !review.hidden
+        }
+
+        console.log(averageRating);
+        console.log(typeof averageRating);
+
+        const response = await fetch(`/api/admin/${props.username}/${name}/${creator}/reviews/${review.username}/change-hidden`, { 
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'Authorization': props.token},
+            body: JSON.stringify(body)
+        })
+
+        if(response.status != 200){
+            const message = await response.text();
+            alert(message);
+            return;
+        }
+        toggleButtonText(index);
+    }
+
 
     useEffect(() => {
         const fetchTrackInfo = async() =>{
@@ -79,12 +133,15 @@ export default function List(props){
         }
     },[isExpand])
     
-    const reviewElement = reviews.map(review =>
+    const reviewElement = displayedReviews.map((review, index) =>
         <div>
             <h2>----------------------------</h2>
             <p>Rating: {review.rating}</p>
             <p>Comment: {review.comment}</p>
             <p>From: {review.username} at {review.dateTime}</p>
+            {props.isAdmin ? (
+                <button onClick={() => handleClick(index)}>{buttonText[index] ? 'Unhide Review':'Hide Review'}</button>
+            ): null}
         </div>        
     )
 
@@ -102,7 +159,7 @@ export default function List(props){
                 <p>Created by: {creator}, last modified at {lastModified}</p>
                 }
                 <p>Number of tracks: {noTracks}</p>
-                <p>Average rating: {averageRating}</p>
+                <p>Average rating: {averageRating == 'NaN' ? 'No ratings yet' : averageRating}</p>
                 <p>Play time: {playtime}</p>
                 {props.created && <button onClick={(e)=>{props.edit(name,creator)}}>Edit</button>}
                 {props.isLoggedIn && <Link to={"create-review"} state={{username:props.username,token:props.token,playlistName:name,creatorName:creator}}>Leave a Review</Link>}

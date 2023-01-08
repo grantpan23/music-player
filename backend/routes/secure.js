@@ -261,7 +261,13 @@ function calculateAverageRating(reviews){
             count++;
         } 
     });
-    return (total/count).toFixed(1);
+
+    const average = total/count;
+    if(!average){
+        return 'No ratings yet';
+    } else {
+        return average.toFixed(1);
+    }
 }
 
 function timeToSecs(time){

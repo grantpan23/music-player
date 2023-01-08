@@ -170,6 +170,8 @@ router.put(`/:username/:playlistName/:creatorName/create-review`, (req,res) =>{
         res.status(400).send('Playlist name does not exist');
     } else if(!(isValidString(newReview.comment) && isValidRating(newReview.rating))) {
         res.status(400).send(`Invalid rating.`);
+    } else if(uName == cName) {
+        res.status(400).send('You cannot review your own playlists.')
     } else{
         newReview.username = uName;
         newReview.dateTime = currentDateTime();

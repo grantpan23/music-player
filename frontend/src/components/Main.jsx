@@ -114,7 +114,7 @@ export default function Main(){
                     <Link to={"user/list/private"} state={{username:username, token:token.accessToken}}>My Playlists</Link>
                 </div>
                 <div>
-                    <PublicList/>
+                    <PublicList isAdmin = {isAdmin} token = {token.accessToken} isLoggedIn = {true} username = {username} />
                 </div>
             </div>
             }

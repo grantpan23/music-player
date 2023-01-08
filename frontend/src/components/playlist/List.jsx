@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react"
 import { useState } from "react"
 import Track from "../Track"
+import { Link } from "react-router-dom"
 
 
 
@@ -40,7 +41,7 @@ export default function List(props){
         const fetchPlaylistData = async() => {
             console.log('sending request');
             let response;
-            if(props.token){
+            if(!props.isPublic){
                 response = await fetch(`/api/secure/${creator}/${name}`, {
                     method: 'GET',
                     headers: {
@@ -104,10 +105,10 @@ export default function List(props){
                 <p>Average rating: {averageRating}</p>
                 <p>Play time: {playtime}</p>
                 {props.created && <button onClick={(e)=>{props.edit(name,creator)}}>Edit</button>}
-                <button>Add comment and rating</button>
+                {props.isLoggedIn && <Link to={"create-review"} state={{username:props.username,token:props.token,playlistName:name,creatorName:creator}}>Leave a Review</Link>}
                 {!isLoading ? 
-                <div>
-                    {isExpand && available && ((!props.token && visibility == "public") || props.token) && 
+                <div>                        
+                    {isExpand && available && ((props.isPublic && visibility == "public") || !props.isPublic) && 
                         <div>
                             <p>*****************************</p>
                             <p>Description: {description}</p>
@@ -117,7 +118,7 @@ export default function List(props){
                             <button onClick={(e)=>{setIsExpand(false)}}>Close List</button>
                         </div>
                     }   
-                    {isExpand && (!available || (!props.token && visibility == "private")) &&
+                    {isExpand && (!available || (props.isPublic && visibility == "private")) &&
                             <div><h2>Playlist no longer available.</h2></div>        
                     }
                     {!isExpand && <button onClick={(e)=>{setIsExpand(true)}}>Expand List</button>}

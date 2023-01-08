@@ -9,6 +9,8 @@ import UserList from './components/admin/UserList'
 import PrivateList from './components/playlist/PrivateList'
 import ListShow from './components/playlist/ListShow'
 import CreateList from './components/playlist/CreateList'
+import CreatReview from './components/playlist/CreateReview'
+import CreateReview from './components/playlist/CreateReview'
 
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
           <Route path='main/user/list/private' element={<PrivateList />}/>
           <Route path='main/user/list/private/create' element={<CreateList/>}/>
           <Route path='main/user/list' element={<ListShow />}/>
+          <Route path='main/create-review' element={<CreateReview />}/>
         </Route>
       </Routes>
     </div>

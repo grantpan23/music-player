@@ -19,7 +19,7 @@ export default function Unauth(){
             </div>
             <button onClick={handleClick}>Log in/Sign in</button>
             <Search addable={false} />
-            <PublicList/>
+            <PublicList isLoggedIn = {false} username = {null}/>
         </div>
     )
 }

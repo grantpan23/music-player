@@ -23,7 +23,9 @@ export default function Login(){
     const [missPass,setMissPass]=useState(false)
     const [miss,setMiss]=useState(false)
    
-    
+    const [loginEmailEmpty,setLoginEmailEmpty] = useState(false)
+    const [loginPasswordEmpty,setLoginPasswordEmpty] = useState(false);
+
     const navigate=useNavigate()
 
     const {dispatch,users} = useContext(AuthContext)
@@ -58,6 +60,14 @@ export default function Login(){
 
     const handleLogIn = (e) =>{
         e.preventDefault()
+
+        if(!email){
+            setLoginEmailEmpty(true);
+        }
+        if(!password){
+            setLoginPasswordEmpty(true);
+        }
+
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
@@ -80,6 +90,8 @@ export default function Login(){
                 <div id="googleBtn"></div>
                 <div onClick={e => setIsLogIn(false)}>Register</div>
                 {err && <span>Wrong email or password</span>}
+                {loginEmailEmpty && <span>Email required</span>}
+                {loginPasswordEmpty && <span>Password required</span>}
             </form> :
             <form onSubmit={handleRegister}>
             <input  placeholder="user name" onChange={e => setuserName(e.target.value)}/>
